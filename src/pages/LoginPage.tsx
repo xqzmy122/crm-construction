@@ -1,5 +1,5 @@
 import { Building2 } from "lucide-react"
-import { useState, type FormEvent, type KeyboardEvent } from "react"
+import { useState, type FormEvent } from "react"
 import { Navigate } from "react-router-dom"
 import { useAuth } from "../auth/useAuth"
 import { Banner } from "../components/ui/Banner"
@@ -7,33 +7,6 @@ import { Button } from "../components/ui/Button"
 import { Field, Input } from "../components/ui/Field"
 import { ScreenMessage } from "../components/ui/ScreenMessage"
 import { toUserMessage } from "../lib/errors"
-
-const DEMO_ACCOUNTS = [
-  {
-    email: "anna@crm-demo.com",
-    password: "Manager123!",
-    role: "Постановщик",
-    name: "Анна Петрова",
-  },
-  {
-    email: "elena@crm-demo.com",
-    password: "Elena123456!",
-    role: "Постановщик",
-    name: "Елена Орлова",
-  },
-  {
-    email: "ivan@crm-demo.com",
-    password: "Ivan123456!",
-    role: "Исполнитель",
-    name: "Иван Сидоров",
-  },
-  {
-    email: "olga@crm-demo.com",
-    password: "Olga123456!",
-    role: "Исполнитель",
-    name: "Ольга Козлова",
-  },
-] as const
 
 export const LoginPage = () => {
   const { profile, loading, accessError, signIn } = useAuth()
@@ -60,22 +33,6 @@ export const LoginPage = () => {
       setError(toUserMessage(err))
     } finally {
       setBusy(false)
-    }
-  }
-
-  const handlePickDemo = (account: (typeof DEMO_ACCOUNTS)[number]) => {
-    setEmail(account.email)
-    setPassword(account.password)
-    setError(null)
-  }
-
-  const handleDemoKeyDown = (
-    event: KeyboardEvent<HTMLTableRowElement>,
-    account: (typeof DEMO_ACCOUNTS)[number],
-  ) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault()
-      handlePickDemo(account)
     }
   }
 
@@ -127,39 +84,6 @@ export const LoginPage = () => {
             {busy ? "Входим…" : "Войти"}
           </Button>
         </form>
-
-        <div className="mt-6 overflow-hidden rounded-card border border-line bg-surface shadow-sm">
-          <p className="border-b border-line px-3 py-2 text-xs text-ink-4">
-            Демо-доступ для проверки
-          </p>
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-line text-ink-4">
-                <th className="px-3 py-2 font-medium">Учётная запись</th>
-                <th className="px-3 py-2 font-medium">Роль</th>
-              </tr>
-            </thead>
-            <tbody>
-              {DEMO_ACCOUNTS.map((account) => (
-                <tr
-                  key={account.email}
-                  role="button"
-                  tabIndex={0}
-                  className="cursor-pointer border-b border-line last:border-0 hover:bg-bg"
-                  onClick={() => handlePickDemo(account)}
-                  onKeyDown={(event) => handleDemoKeyDown(event, account)}
-                >
-                  <td className="px-3 py-2">
-                    <div className="font-medium text-ink">{account.name}</div>
-                    <div className="font-mono text-ink-3">{account.email}</div>
-                    <div className="font-mono text-ink-4">{account.password}</div>
-                  </td>
-                  <td className="px-3 py-2 text-ink-2">{account.role}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   )
